@@ -18,11 +18,11 @@ const Mint = () => {
     else if (count > maxGuests) setCount(maxGuests);
   };
 
-  // Creating a date object
-  var today = new Date();
+  // // Creating a date object
+  // var today = new Date();
 
-  // Getting full month name (e.g. "June")
-  var month = today.toLocaleString("default", { month: "long" }).toUpperCase();
+  // // Getting full month name (e.g. "June")
+  // var month = today.toLocaleString("default", { month: "long" }).toUpperCase();
 
   const [daysLeft, setDaysLeft] = useState(0);
   const [hoursLeft, setHoursLeft] = useState(0);

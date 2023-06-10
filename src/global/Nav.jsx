@@ -30,7 +30,7 @@ const Navbar = () => {
     const currentPath = location.pathname;
     switch (currentPath) {
       case "/":
-        setText("Paetau Ondrej &amp; Kristofer Brody");
+        setText("Paetau Ondrej & Kristofer Brody");
         break;
       case "/collectorfond":
         setText("BrodyPaetau Collector Fund");
