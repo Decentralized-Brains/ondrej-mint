@@ -187,7 +187,7 @@ const Mint = () => {
           <div className="flex w-full  lg:justify-end ">
             <a
               href="//app.publicmint.io/mint/0x0BkFE...Bc9D"
-              className="flex items-center justify-center  gap-[12px] rounded-[4px] bg-[#1E1E1E] px-[58px] py-[14px] text-xl font-extrabold uppercase text-white max-lg:w-full"
+              className="flex items-center justify-center  gap-[12px] rounded-[4px] bg-[#1E1E1E] px-[54px] py-[14px] text-xl font-extrabold uppercase text-white max-lg:w-full"
               target="_blank"
               rel="noreferrer"
             >
