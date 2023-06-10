@@ -1,23 +1,16 @@
-import logo from './logo.svg';
-import './App.css';
+import { Routes, Route } from "react-router-dom";
+import Navbar from "./global/Nav";
+import Mint from "./mint/Mint";
+import CollectorFond from "./collector/CollectorFond";
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <Navbar />
+      <Routes>
+        <Route path="/mint" element={<Mint />}></Route>
+        <Route path="/collectorfond" element={<CollectorFond />}></Route>
+      </Routes>
     </div>
   );
 }
