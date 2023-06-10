@@ -192,7 +192,7 @@ const Mint = () => {
               rel="noreferrer"
             >
               <img src={CrossMintImg} alt="" />
-              Mint now with Eth
+              Buy with Crossmint
             </a>
           </div>
 
