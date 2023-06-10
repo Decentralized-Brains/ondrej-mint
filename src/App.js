@@ -8,6 +8,7 @@ function App() {
     <div className="App">
       <Navbar />
       <Routes>
+        <Route path="/" element={<Mint />}></Route>
         <Route path="/mint" element={<Mint />}></Route>
         <Route path="/collectorfond" element={<CollectorFond />}></Route>
       </Routes>

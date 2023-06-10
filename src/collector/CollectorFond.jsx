@@ -85,7 +85,7 @@ const CollectorFond = () => {
       </div>
 
       <div className="mt-[21px]">
-        <PreviousMonth />
+        <TopElevenToTwenty />
       </div>
 
       {/* for previous month */}
@@ -94,7 +94,7 @@ const CollectorFond = () => {
       </div>
       <div className="mt-[16px]">
         <h6 className=" text-[16px] font-semibold uppercase text-[#828282]">
-          Current fund amount
+          fund amount
         </h6>
         <h4 className="mt-[4px] text-lg font-extrabold sm:text-[28px]">
           1.036 ETH
@@ -102,7 +102,7 @@ const CollectorFond = () => {
       </div>
 
       <div className="my-[21px]">
-        <TopElevenToTwenty />
+        <PreviousMonth />
       </div>
     </div>
   );

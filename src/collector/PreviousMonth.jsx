@@ -21,7 +21,7 @@ const TopTen = () => {
                 Spent this month
               </th>
               <th scope="col" className="px-6 py-[25px] font-bold">
-                Estimated Payout
+                Payout Received
               </th>
               <th scope="col" className="px-6 py-[25px] font-bold">
                 Previously in Top 10

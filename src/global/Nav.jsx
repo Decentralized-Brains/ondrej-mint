@@ -99,36 +99,33 @@ const Navbar = () => {
             </div>
             {/* grid px-4 grid-cols-2 md:grid-cols-4 lg:grid-cols-5 */}
             <nav className="container grid gap-1.5 pb-16 pt-16 text-[30px] font-bold text-black md:grid-cols-4">
+              <a className="" rel="noreferrer" href="http://brodypaetau.com/">
+                Home
+              </a>
+              <div className=" cursor-not-allowed">Search</div>
+
               <a
                 className=""
                 rel="noreferrer"
-                href="http://brodypaetau.com/"
+                href="https://old.brodypaetau.com/"
                 target="_blank"
               >
-                Home
-              </a>
-              <NavLink className="" to="/about" onClick={handleNav}>
-                Search
-              </NavLink>
-
-              <NavLink
-                className=""
-                to="/previouscollection"
-                onClick={handleNav}
-              >
                 Old Website
-              </NavLink>
+              </a>
 
               <div></div>
 
-              <NavLink className="" to="/contact" onClick={handleNav}>
-                About
-              </NavLink>
               <a
                 className=""
                 rel="noreferrer"
-                href="http://brodypaetau.com/"
-                target="_blank"
+                href="https://brodypaetau.com/category/about"
+              >
+                About
+              </a>
+              <a
+                className=""
+                rel="noreferrer"
+                href="https://brodypaetau.com/category/newsletters"
               >
                 Newsletters
               </a>
@@ -141,7 +138,7 @@ const Navbar = () => {
               <a
                 className=""
                 rel="noreferrer"
-                href="https://old.brodypaetau.com/"
+                href="https://brodypaetau.com/category/publications"
                 target="_blank"
               >
                 Publications
