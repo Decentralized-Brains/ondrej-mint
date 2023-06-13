@@ -73,6 +73,9 @@ const Mint = () => {
             <span className="rounded-full bg-[#FFF200] px-[10px] py-[8px] text-[18px] font-extrabold text-black">
               Live
             </span>
+            <span className="rounded-full bg-[#FFF200] px-[10px] py-[8px] text-[18px] font-extrabold text-black">
+              Soldout
+            </span>
           </div>
 
           <div className="mt-[16px] flex w-full flex-col items-center justify-between lg:flex-row">
@@ -96,7 +99,7 @@ const Mint = () => {
             </div>
           </div>
 
-          <div className="mt-[24px] flex items-center justify-start gap-[45px]">
+          <div className="mt-[24px] flex items-center justify-start gap-[45px] max-sm:flex-wrap">
             <div>
               <div className="font-semibold text-[#828282]">Whitelist:</div>
               <div className="mt-[8px] flex items-center justify-center gap-[9px]  text-[18px]">
@@ -109,6 +112,16 @@ const Mint = () => {
 
             <div>
               <div className="font-semibold text-[#828282]">Presale:</div>
+              <div className="mt-[8px] flex items-center justify-center gap-[9px]  text-[18px]">
+                <span className="rounded-full bg-[#33333380] p-[1px] text-2xl text-[#FFF200]">
+                  <BiCheck />
+                </span>
+                <span className="text-sm font-bold uppercase">Soldout</span>
+              </div>
+            </div>
+
+            <div>
+              <div className="font-semibold text-[#828282]">Public Mint:</div>
               <div className="mt-[8px] flex items-center justify-center gap-[9px]  text-[18px]">
                 <span className="rounded-full bg-[#33333380] p-[1px] text-2xl text-[#FFF200]">
                   <BiCheck />
