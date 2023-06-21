@@ -2,10 +2,12 @@ import React, { useState, useEffect } from "react";
 
 import { AiOutlineClose } from "react-icons/ai";
 import {
-  //   FaDiscord,
+  FaDiscord,
+  FaTiktok,
+  FaFacebook,
+  FaTelegram,
   FaTwitter,
   FaInstagram,
-  //   FaTelegram,
   //   FaReddit,
   FaYoutube,
 } from "react-icons/fa";
@@ -62,6 +64,18 @@ const Navbar = () => {
         </h1>
 
         <ul className="flex items-center justify-center gap-2">
+          <li className="rounded-full bg-[#ddd] p-1 text-xl text-black">
+            <FaDiscord className="" />
+          </li>
+          <li className="rounded-full bg-[#ddd] p-1 text-xl text-black">
+            <FaTiktok className="" />
+          </li>
+          <li className="rounded-full bg-[#ddd] p-1 text-xl text-black">
+            <FaFacebook className="" />
+          </li>
+          <li className="rounded-full bg-[#ddd] p-1 text-xl text-black">
+            <FaTelegram className="" />
+          </li>
           <li className="rounded-full bg-[#ddd] p-1 text-xl text-black">
             <FaYoutube className="" />
           </li>

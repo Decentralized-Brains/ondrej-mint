@@ -1,8 +1,21 @@
 import React, { useState, useEffect } from "react";
-import DummyImg from "../assets/dummy.png";
 import CrossMintImg from "../assets/Vector.svg";
 import { FaEthereum } from "react-icons/fa";
 import { BiCheck, BiMinus, BiPlus } from "react-icons/bi";
+
+//slider start
+// Import Swiper React components
+import { Swiper, SwiperSlide } from "swiper/react";
+
+// Import Swiper styles
+import "swiper/css";
+import "swiper/css/navigation";
+
+// import required modules
+import { Autoplay } from "swiper";
+import { sliderData } from "../data/Data.jsx";
+
+//slider end
 
 const Mint = () => {
   const [count, setCount] = useState(2);
@@ -56,11 +69,27 @@ const Mint = () => {
     <div className="container mt-[60px]">
       <div className="flex flex-col md:flex-row">
         <div className=" mb-10 w-full md:mb-0 md:w-1/2 lg:max-w-lg">
-          <img
-            className="mx-auto object-cover object-center"
-            alt="hero"
-            src={DummyImg}
-          />
+          <Swiper
+            autoplay={{
+              delay: 2500,
+              disableOnInteraction: false,
+            }}
+            // navigation={true}
+            modules={[Autoplay]}
+            className="mySwiper"
+          >
+            {sliderData.map((item) => {
+              return (
+                <SwiperSlide>
+                  <img
+                    className="mx-auto object-cover object-center lg:h-[550px] lg:w-[700px]"
+                    alt="hero"
+                    src={item.img}
+                  />
+                </SwiperSlide>
+              );
+            })}
+          </Swiper>
         </div>
 
         <div className="flex flex-col items-center text-center text-[#DDDDDD] md:w-1/2 md:items-start md:pl-[30px] md:text-left lg:flex-grow lg:pl-[65px]">
@@ -85,7 +114,9 @@ const Mint = () => {
                 <span className="text-[#828282]">
                   <FaEthereum />
                 </span>
-                0xBkFE...Bc9D
+                <a href="" className=" cursor-pointer">
+                  0xBkFE...Bc9D
+                </a>
               </div>
             </div>
 
