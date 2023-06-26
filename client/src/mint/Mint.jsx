@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import CrossMintImg from "../assets/Vector.svg";
 import { FaEthereum } from "react-icons/fa";
 import { BiCheck, BiMinus, BiPlus } from "react-icons/bi";
+import axios from "axios";
 
 //slider start
 // Import Swiper React components
@@ -18,7 +19,16 @@ import { sliderData } from "../data/Data.jsx";
 //slider end
 
 const Mint = () => {
+  const [collection, setCollection] = useState({})
   const [count, setCount] = useState(2);
+
+  const fetchCollection = async () => {
+      const res = await axios.get('http://localhost:8080/api/collection')
+      console.log(res.data)
+      setCollection(res.data)
+  }
+
+
   const maxGuests = 999;
   const minGuests = 1;
 
@@ -58,9 +68,21 @@ const Mint = () => {
     setHoursLeft(hoursLeft);
     setMinutesLeft(minutesLeft);
     setSecondsLeft(secondsLeft);
+
+  }
+
+  const openLink = (url) => {
+    window.open(url, '_blank');
+  };
+
+  const handleConditionClick = () => {
+    const { conditions } = collection
+    if (conditions.link) openLink(conditions.link)
+    if (conditions.pdf) openLink(`http://localhost:8080/files/${conditions.pdf}`)
   }
 
   useEffect(() => {
+    fetchCollection()
     const intervalId = setInterval(updateCountdown, 1000);
     return () => clearInterval(intervalId);
   }, []);
@@ -78,13 +100,13 @@ const Mint = () => {
             modules={[Autoplay]}
             className="mySwiper"
           >
-            {sliderData.map((item) => {
+            {collection.images?.map((filename) => {
               return (
                 <SwiperSlide>
                   <img
                     className="mx-auto object-cover object-center lg:h-[550px] lg:w-[700px]"
                     alt="hero"
-                    src={item.img}
+                    src={`http://localhost:8080/files/${filename}`}
                   />
                 </SwiperSlide>
               );
@@ -114,8 +136,8 @@ const Mint = () => {
                 <span className="text-[#828282]">
                   <FaEthereum />
                 </span>
-                <a href="" className=" cursor-pointer">
-                  0xBkFE...Bc9D
+                <a href={`https://goerli.etherscan.io/address/${collection.contractAddress}`} target="_blank" className="cursor-pointer">
+                  {`${collection.contractAddress?.slice(0, 6)}...${collection.contractAddress?.slice(34, 44)}`}
                 </a>
               </div>
             </div>
@@ -163,10 +185,14 @@ const Mint = () => {
           </div>
 
           <div className="my-[16px] flex  items-center justify-start gap-[8px]">
-            <div className="rounded-full bg-[#33333380] px-[16px] py-[10px] text-sm font-bold uppercase text-[#828282]">
-              Max 5 per wallet
+            <div 
+              onClick={() => setCount(collection.maxPerWallet)}
+              className="cursor-pointer rounded-full bg-[#33333380] px-[16px] py-[10px] text-sm font-bold uppercase text-[#828282]">
+              Max {collection.maxPerWallet} per wallet
             </div>
-            <div className="rounded-full bg-[#33333380] px-[16px] py-[10px] text-sm font-bold uppercase text-[#828282]">
+            <div
+              onClick={handleConditionClick}
+              className="cursor-pointer rounded-full bg-[#33333380] px-[16px] py-[10px] text-sm font-bold uppercase text-[#828282]">
               Additional Conditions Apply *
             </div>
           </div>
@@ -204,7 +230,7 @@ const Mint = () => {
             <div className="mb-2 flex items-center justify-center gap-[24px] font-bold lg:mb-0">
               <div
                 className="cursor-pointer rounded-full bg-[#33333380] p-2"
-                onClick={() => decrementCount()}
+                onClick={() => setCount(count > 1 ? count - 1 : 1)}
               >
                 <BiMinus className="text-lg" />
               </div>
@@ -212,7 +238,7 @@ const Mint = () => {
               <span className="font-space text-4xl font-bold">{count}</span>
               <div
                 className="cursor-pointer rounded-full bg-[#33333380] p-2"
-                onClick={() => incrementCount()}
+                onClick={() => setCount(count < collection.maxPerWallet ? count + 1 : count)}
               >
                 <BiPlus className="text-lg" />
               </div>
