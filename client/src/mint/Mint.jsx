@@ -3,6 +3,7 @@ import CrossMintImg from "../assets/Vector.svg";
 import { FaEthereum } from "react-icons/fa";
 import { BiCheck, BiMinus, BiPlus } from "react-icons/bi";
 import axios from "axios";
+import Timer from "./Timer.jsx";
 
 //slider start
 // Import Swiper React components
@@ -17,6 +18,148 @@ import { Autoplay } from "swiper";
 import { sliderData } from "../data/Data.jsx";
 
 //slider end
+function getTimeStatus(jsonData) {
+  if (!Object.keys(jsonData).length) return { msg: "", days: 0, hours: 0 };
+  const currentDate = new Date();
+
+  if (currentDate < new Date(jsonData.whitelist.startDate)) {
+    const startDate = new Date(jsonData.whitelist.startDate);
+    return {
+      msg: "starting",
+      date: startDate.toISOString()
+    };
+  } else if (
+    currentDate >= new Date(jsonData.whitelist.startDate) &&
+    currentDate <= new Date(jsonData.whitelist.endDate)
+  ) {
+    const endDate = new Date(jsonData.whitelist.endDate);
+    return {
+      msg: "ending",
+      date: endDate.toISOString()
+    };
+  } else if (
+    currentDate > new Date(jsonData.whitelist.endDate) &&
+    !jsonData.presale.startDate
+  ) {
+    return {
+      msg: "ending",
+      date: "No specific date"
+    };
+  } else if (
+    currentDate > new Date(jsonData.whitelist.endDate) &&
+    currentDate < new Date(jsonData.presale.startDate)
+  ) {
+    const startDate = new Date(jsonData.presale.startDate);
+    return {
+      msg: "starting",
+      date: startDate.toISOString()
+    };
+  } else if (
+    currentDate >= new Date(jsonData.presale.startDate) &&
+    currentDate <= new Date(jsonData.presale.endDate)
+  ) {
+    const endDate = new Date(jsonData.presale.endDate);
+    return {
+      msg: "ending",
+      date: endDate.toISOString()
+    };
+  } else if (
+    currentDate > new Date(jsonData.presale.endDate) &&
+    !jsonData.publicMint.startDate
+  ) {
+    return {
+      msg: "ending",
+      date: "No specific date"
+    };
+  } else if (
+    currentDate >= new Date(jsonData.publicMint.startDate) &&
+    currentDate <= new Date(jsonData.publicMint.endDate)
+  ) {
+    const endDate = new Date(jsonData.publicMint.endDate);
+    return {
+      msg: "ending",
+      date: endDate.toISOString()
+    };
+  } else {
+    return {
+      msg: "ending",
+      date: "No specific date"
+    };
+  }
+}
+
+
+function getHeadlineStatus(jsonData) {
+  if (!Object.keys(jsonData).length) return { curr: "", status: "" };
+  const currentDate = new Date();
+  const statusObj = { curr: "", status: "" };
+
+  if (currentDate < new Date(jsonData.whitelist.startDate)) {
+    statusObj.curr = "WHITELIST";
+    statusObj.status = "upcoming";
+  } else if (
+    currentDate >= new Date(jsonData.whitelist.startDate) &&
+    currentDate <= new Date(jsonData.whitelist.endDate)
+  ) {
+    statusObj.curr = "WHITELIST";
+    statusObj.status = jsonData.whitelist.isRunning ? "live" : "soldout";
+  } else if (
+    currentDate > new Date(jsonData.whitelist.endDate) &&
+    !jsonData.presale.startDate
+  ) {
+    statusObj.curr = "WHITELIST";
+    statusObj.status = "soldout";
+  } else if (
+    currentDate > new Date(jsonData.whitelist.endDate) &&
+    currentDate < new Date(jsonData.presale.startDate)
+  ) {
+    statusObj.curr = "PRESALE";
+    statusObj.status = "upcoming";
+  } else if (
+    currentDate >= new Date(jsonData.presale.startDate) &&
+    currentDate <= new Date(jsonData.presale.endDate)
+  ) {
+    statusObj.curr = "PRESALE";
+    statusObj.status = jsonData.presale.isRunning ? "live" : "soldout";
+  } else if (
+    currentDate > new Date(jsonData.presale.endDate) &&
+    !jsonData.publicMint.startDate
+  ) {
+    statusObj.curr = "PRESALE";
+    statusObj.status = "soldout";
+  } else if (
+    currentDate >= new Date(jsonData.publicMint.startDate) &&
+    currentDate <= new Date(jsonData.publicMint.endDate)
+  ) {
+    statusObj.curr = "PUBLIC MINT";
+    statusObj.status = jsonData.publicMint.isRunning ? "live" : "soldout";
+  } else {
+    statusObj.curr = "PUBLIC MINT";
+    statusObj.status = "soldout";
+  }
+
+  return statusObj;
+}
+
+function getStatus(obj) {
+  if (!obj) return "COMING SOON";
+  
+  const { startDate, endDate, isRunning } = obj;
+  if (!startDate || !endDate) return "COMING SOON";
+
+  const currDT = new Date();
+  if (isRunning) {
+    const startDT = new Date(startDate);
+    const endDT = new Date(endDate);
+
+    if (currDT < startDT) return "UPCOMING";
+    else if (currDT >= startDT && currDT <= endDT) return "LIVE"
+    else return "SOLDOUT";
+  } else {
+    return "SOLDOUT"
+  };
+}
+
 
 const Mint = () => {
   const [collection, setCollection] = useState({})
@@ -41,11 +184,6 @@ const Mint = () => {
     else if (count > maxGuests) setCount(maxGuests);
   };
 
-  // // Creating a date object
-  // var today = new Date();
-
-  // // Getting full month name (e.g. "June")
-  // var month = today.toLocaleString("default", { month: "long" }).toUpperCase();
 
   const [daysLeft, setDaysLeft] = useState(0);
   const [hoursLeft, setHoursLeft] = useState(0);
@@ -83,9 +221,13 @@ const Mint = () => {
 
   useEffect(() => {
     fetchCollection()
-    const intervalId = setInterval(updateCountdown, 1000);
-    return () => clearInterval(intervalId);
+    // const intervalId = setInterval(updateCountdown, 1000);
+    // return () => clearInterval(intervalId);
   }, []);
+
+  const { whitelist, presale, publicMint } = collection
+  const { date, msg } = getTimeStatus(collection)
+  console.log(date)
 
   return (
     <div className="container mt-[60px]">
@@ -119,13 +261,10 @@ const Mint = () => {
 
           <div className="flex items-center justify-center gap-[22px] py-4">
             <h1 className=" text-2xl font-extrabold uppercase sm:text-[2rem]">
-              Public Mint is{" "}
+              {getHeadlineStatus(collection).curr} is{" "}
             </h1>
             <span className="rounded-full bg-[#FFF200] px-[10px] py-[8px] text-[18px] font-extrabold text-black">
-              Live
-            </span>
-            <span className="rounded-full bg-[#FFF200] px-[10px] py-[8px] text-[18px] font-extrabold text-black">
-              Soldout
+              {getHeadlineStatus(collection).status}
             </span>
           </div>
 
@@ -143,12 +282,8 @@ const Mint = () => {
             </div>
 
             <div className="mt-[16px] lg:mt-0">
-              <div className="font-semibold text-[#828282]">Ending in</div>
-              <div className="mt-[8px] font-space text-[22px] font-bold">
-                {daysLeft}d <span className="font-light"> : </span> {hoursLeft}h{" "}
-                <span className="font-light"> : </span> {minutesLeft}m{" "}
-                <span className="font-light"> : </span> {secondsLeft}s
-              </div>
+              <div className="font-semibold text-[#828282]">{msg} in</div>
+              {date && <Timer endDate={date} />}
             </div>
           </div>
 
@@ -159,7 +294,7 @@ const Mint = () => {
                 <span className="rounded-full bg-[#33333380] p-[1px] text-2xl text-[#FFF200]">
                   <BiCheck />
                 </span>
-                <span className="text-sm font-bold uppercase">Soldout</span>
+                <span className="text-sm font-bold uppercase">{getStatus(whitelist)}</span>
               </div>
             </div>
 
@@ -169,7 +304,7 @@ const Mint = () => {
                 <span className="rounded-full bg-[#33333380] p-[1px] text-2xl text-[#FFF200]">
                   <BiCheck />
                 </span>
-                <span className="text-sm font-bold uppercase">Soldout</span>
+                <span className="text-sm font-bold uppercase">{getStatus(presale)}</span>
               </div>
             </div>
 
@@ -179,7 +314,7 @@ const Mint = () => {
                 <span className="rounded-full bg-[#33333380] p-[1px] text-2xl text-[#FFF200]">
                   <BiCheck />
                 </span>
-                <span className="text-sm font-bold uppercase">Soldout</span>
+                <span className="text-sm font-bold uppercase">{getStatus(publicMint)}</span>
               </div>
             </div>
           </div>

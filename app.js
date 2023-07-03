@@ -1,13 +1,13 @@
 const express = require("express")
-const mongoose = require("mongoose")
 const fs = require('fs');
 const cors = require("cors")
 const multer = require('multer')
+const mongoose = require("mongoose")
+const Collection = require("./CollectionModel")
 
 // constants
 const PORT = 8080
 const mongoURI = "mongodb+srv://alfazsozib:gjbq4U1apVx2HOV6@cluster0.fgytv0f.mongodb.net/ondrej?retryWrites=true&w=majority"
-const Collection = mongoose.model('Collection', { name: String, images: [], maxPerWallet: Number, contractAddress: String, conditions: {} });
 const upload = multer({ dest: 'public/files/' });
 
 const app = express()
@@ -21,37 +21,24 @@ app.get("/api/collection", async (req, res) => {
     res.json(collection)
 })
 
-app.post('/api/upload-collection-images', upload.array('images', 10), async (req, res) => {
+
+const cpUpload = upload.fields([{ name: 'pdf', maxCount: 1 }, { name: 'images', maxCount: 10 }])
+app.post('/api/upload-collection-files', cpUpload, async (req, res) => {
     try {
         const collection = await Collection.findOne({ name: "ondrej" });
-
-        // delete old images
-        await Promise.all(
-            collection.images.map(async (filename) => {
-                await fs.promises.unlink(`public/files/${filename}`);
-            })
-        )
-
-        // save new images
-        collection.images = req.files.map(file => file.filename);
+        if (req.files.images) collection.images = req.files['images'].map(file => file.filename);
+        if (req.files.pdf) collection.conditions.pdf = req.files['pdf'][0].filename;
         await collection.save();
 
-        res.json({ message: 'Images uploaded successfully.' });
+        res.json({ message: 'Uploaded successfully.' });
     } catch (error) {
         console.log(error)
         res.json({ message: 'Error uploading images.' });
     }
 }); 
 
-app.post("/api/update-data", upload.single('pdf'), async (req, res) => {
-    const { contractAddress, maxPerWallet } = req.body;
-    const updatedObject = {}
-    if (contractAddress) updatedObject.contractAddress = contractAddress;
-    if (maxPerWallet) updatedObject.maxPerWallet = maxPerWallet;
-    if (req.body.link) updatedObject.conditions = { link: req.body.link }
-    if (req.file) updatedObject.conditions = { pdf: req.file.filename }
-
-    await Collection.findOneAndUpdate({ name: "ondrej" }, updatedObject);
+app.post("/api/update-data", async (req, res) => {
+    await Collection.findOneAndUpdate({ name: "ondrej" }, req.body);
     res.json({ message: 'Updated successfully.' });
 })
 
