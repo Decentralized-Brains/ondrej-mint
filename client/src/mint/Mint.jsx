@@ -203,7 +203,7 @@ const Mint = () => {
   const [count, setCount] = useState(2);
 
   const fetchCollection = async () => {
-      const res = await axios.get('http://localhost:8080/api/collection')
+      const res = await axios.get('http://140.82.7.237:8080/api/collection')
       console.log(res.data)
       setCollection(res.data)
   }
@@ -253,7 +253,7 @@ const Mint = () => {
   const handleConditionClick = () => {
     const { conditions } = collection
     if (conditions.link) openLink(conditions.link)
-    if (conditions.pdf) openLink(`http://localhost:8080/files/${conditions.pdf}`)
+    if (conditions.pdf) openLink(`http://140.82.7.237:8080/files/${conditions.pdf}`)
   }
 
   useEffect(() => {
@@ -285,7 +285,7 @@ const Mint = () => {
                   <img
                     className="mx-auto object-cover object-center lg:h-[550px] lg:w-[700px]"
                     alt="hero"
-                    src={`http://localhost:8080/files/${filename}`}
+                    src={`http://140.82.7.237:8080/files/${filename}`}
                   />
                 </SwiperSlide>
               );
