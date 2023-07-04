@@ -20,6 +20,7 @@ import { sliderData } from "../data/Data.jsx";
 //slider end
 function getTimeStatus(jsonData) {
   const currentDate = new Date();
+  if (!Object.keys(jsonData).length) return { msg: "ending", date: currentDate };
 
   if (currentDate < new Date(jsonData.whitelist.startDate)) {
     return {
