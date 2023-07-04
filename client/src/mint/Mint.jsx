@@ -17,7 +17,6 @@ import "swiper/css/navigation";
 import { Autoplay } from "swiper";
 import { sliderData } from "../data/Data.jsx";
 
-//slider end
 function getTimeStatus(jsonData) {
   const currentDate = new Date();
   if (!Object.keys(jsonData).length) return { msg: "ending", date: currentDate };
@@ -25,7 +24,7 @@ function getTimeStatus(jsonData) {
   if (currentDate < new Date(jsonData.whitelist.startDate)) {
     return {
       msg: "starting",
-      date: currentDate.toISOString()
+      date: currentDate
     };
   } else if (
     currentDate >= new Date(jsonData.whitelist.startDate) &&
@@ -35,7 +34,7 @@ function getTimeStatus(jsonData) {
     const endDate = new Date(jsonData.whitelist.endDate);
     return {
       msg: "ending",
-      date: endDate.toISOString()
+      date: endDate
     };
   } else if (
     currentDate > new Date(jsonData.whitelist.endDate) &&
@@ -43,15 +42,15 @@ function getTimeStatus(jsonData) {
   ) {
     return {
       msg: "ending",
-      date: currentDate.toISOString()
+      date: currentDate
     };
   } else if (
-    currentDate > new Date(jsonData.whitelist.endDate) &&
+    currentDate >= new Date(jsonData.whitelist.endDate) &&
     currentDate < new Date(jsonData.presale.startDate)
   ) {
     return {
       msg: "starting",
-      date: currentDate.toISOString()
+      date: new Date(jsonData.presale.startDate)
     };
   } else if (
     currentDate >= new Date(jsonData.presale.startDate) &&
@@ -61,7 +60,7 @@ function getTimeStatus(jsonData) {
     const endDate = new Date(jsonData.presale.endDate);
     return {
       msg: "ending",
-      date: endDate.toISOString()
+      date: endDate
     };
   } else if (
     currentDate > new Date(jsonData.presale.endDate) &&
@@ -69,7 +68,7 @@ function getTimeStatus(jsonData) {
   ) {
     return {
       msg: "ending",
-      date: currentDate.toISOString()
+      date: currentDate
     };
   } else if (
     currentDate >= new Date(jsonData.publicMint.startDate) &&
@@ -79,15 +78,16 @@ function getTimeStatus(jsonData) {
     const endDate = new Date(jsonData.publicMint.endDate);
     return {
       msg: "ending",
-      date: endDate.toISOString()
+      date: endDate
     };
   } else {
     return {
       msg: "ending",
-      date: currentDate.toISOString()
+      date: currentDate
     };
   }
 }
+
 
 
 
@@ -229,7 +229,7 @@ const Mint = () => {
 
   const { whitelist, presale, publicMint } = collection
   const { date, msg } = getTimeStatus(collection)
-  console.log(date)
+  console.log(date, msg)
 
   return (
     <div className="container mt-[60px]">

@@ -32,7 +32,8 @@ const Timer = ({ endDate }) => {
         }, 1000);
 
         return () => clearInterval(timer);
-    }, []);
+    }, [endDate]);
+    console.log(timeLeft);
 
     return (
         <div>
