@@ -19,18 +19,17 @@ import { sliderData } from "../data/Data.jsx";
 
 //slider end
 function getTimeStatus(jsonData) {
-  if (!Object.keys(jsonData).length) return { msg: "", days: 0, hours: 0 };
   const currentDate = new Date();
 
   if (currentDate < new Date(jsonData.whitelist.startDate)) {
-    const startDate = new Date(jsonData.whitelist.startDate);
     return {
       msg: "starting",
-      date: startDate.toISOString()
+      date: currentDate.toISOString()
     };
   } else if (
     currentDate >= new Date(jsonData.whitelist.startDate) &&
-    currentDate <= new Date(jsonData.whitelist.endDate)
+    currentDate <= new Date(jsonData.whitelist.endDate) &&
+    jsonData.whitelist.isRunning
   ) {
     const endDate = new Date(jsonData.whitelist.endDate);
     return {
@@ -43,20 +42,20 @@ function getTimeStatus(jsonData) {
   ) {
     return {
       msg: "ending",
-      date: "No specific date"
+      date: currentDate.toISOString()
     };
   } else if (
     currentDate > new Date(jsonData.whitelist.endDate) &&
     currentDate < new Date(jsonData.presale.startDate)
   ) {
-    const startDate = new Date(jsonData.presale.startDate);
     return {
       msg: "starting",
-      date: startDate.toISOString()
+      date: currentDate.toISOString()
     };
   } else if (
     currentDate >= new Date(jsonData.presale.startDate) &&
-    currentDate <= new Date(jsonData.presale.endDate)
+    currentDate <= new Date(jsonData.presale.endDate) &&
+    jsonData.presale.isRunning
   ) {
     const endDate = new Date(jsonData.presale.endDate);
     return {
@@ -69,11 +68,12 @@ function getTimeStatus(jsonData) {
   ) {
     return {
       msg: "ending",
-      date: "No specific date"
+      date: currentDate.toISOString()
     };
   } else if (
     currentDate >= new Date(jsonData.publicMint.startDate) &&
-    currentDate <= new Date(jsonData.publicMint.endDate)
+    currentDate <= new Date(jsonData.publicMint.endDate) &&
+    jsonData.publicMint.isRunning
   ) {
     const endDate = new Date(jsonData.publicMint.endDate);
     return {
@@ -83,10 +83,11 @@ function getTimeStatus(jsonData) {
   } else {
     return {
       msg: "ending",
-      date: "No specific date"
+      date: currentDate.toISOString()
     };
   }
 }
+
 
 
 function getHeadlineStatus(jsonData) {
