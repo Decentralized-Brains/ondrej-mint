@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 
 const Timer = ({ endDate }) => {
     const calculateTimeLeft = () => {
+        console.log(new Date(endDate), new Date())
         const difference = new Date(endDate) - new Date();
         let timeLeft = {};
 

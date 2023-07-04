@@ -19,25 +19,43 @@ import { sliderData } from "../data/Data.jsx";
 
 function getTimeStatus(jsonData) {
   const currentDate = new Date();
+  currentDate.setHours(0, 0, 0, 0);
   if (!Object.keys(jsonData).length) return { msg: "ending", date: currentDate };
 
-  if (currentDate < new Date(jsonData.whitelist.startDate)) {
+  const whitelistStartDate = new Date(jsonData.whitelist.startDate);
+  whitelistStartDate.setHours(0, 0, 0, 0);
+
+  const whitelistEndDate = new Date(jsonData.whitelist.endDate);
+  whitelistEndDate.setHours(0, 0, 0, 0);
+
+  const presaleStartDate = new Date(jsonData.presale.startDate);
+  presaleStartDate.setHours(0, 0, 0, 0);
+
+  const presaleEndDate = new Date(jsonData.presale.endDate);
+  presaleEndDate.setHours(0, 0, 0, 0);
+
+  const publicMintStartDate = new Date(jsonData.publicMint.startDate);
+  publicMintStartDate.setHours(0, 0, 0, 0);
+
+  const publicMintEndDate = new Date(jsonData.publicMint.endDate);
+  publicMintEndDate.setHours(0, 0, 0, 0);
+
+  if (currentDate < whitelistStartDate) {
     return {
       msg: "starting",
-      date: currentDate
+      date: whitelistStartDate
     };
   } else if (
-    currentDate >= new Date(jsonData.whitelist.startDate) &&
-    currentDate <= new Date(jsonData.whitelist.endDate) &&
+    currentDate >= whitelistStartDate &&
+    currentDate <= whitelistEndDate &&
     jsonData.whitelist.isRunning
   ) {
-    const endDate = new Date(jsonData.whitelist.endDate);
     return {
       msg: "ending",
-      date: endDate
+      date: whitelistEndDate
     };
   } else if (
-    currentDate > new Date(jsonData.whitelist.endDate) &&
+    currentDate > whitelistEndDate &&
     !jsonData.presale.startDate
   ) {
     return {
@@ -45,25 +63,24 @@ function getTimeStatus(jsonData) {
       date: currentDate
     };
   } else if (
-    currentDate >= new Date(jsonData.whitelist.endDate) &&
-    currentDate < new Date(jsonData.presale.startDate)
+    currentDate >= whitelistEndDate &&
+    currentDate < presaleStartDate
   ) {
     return {
       msg: "starting",
-      date: new Date(jsonData.presale.startDate)
+      date: presaleStartDate
     };
   } else if (
-    currentDate >= new Date(jsonData.presale.startDate) &&
-    currentDate <= new Date(jsonData.presale.endDate) &&
+    currentDate >= presaleStartDate &&
+    currentDate <= presaleEndDate &&
     jsonData.presale.isRunning
   ) {
-    const endDate = new Date(jsonData.presale.endDate);
     return {
       msg: "ending",
-      date: endDate
+      date: presaleEndDate
     };
   } else if (
-    currentDate > new Date(jsonData.presale.endDate) &&
+    currentDate > presaleEndDate &&
     !jsonData.publicMint.startDate
   ) {
     return {
@@ -71,14 +88,13 @@ function getTimeStatus(jsonData) {
       date: currentDate
     };
   } else if (
-    currentDate >= new Date(jsonData.publicMint.startDate) &&
-    currentDate <= new Date(jsonData.publicMint.endDate) &&
+    currentDate >= publicMintStartDate &&
+    currentDate <= publicMintEndDate &&
     jsonData.publicMint.isRunning
   ) {
-    const endDate = new Date(jsonData.publicMint.endDate);
     return {
       msg: "ending",
-      date: endDate
+      date: publicMintEndDate
     };
   } else {
     return {
@@ -88,53 +104,71 @@ function getTimeStatus(jsonData) {
   }
 }
 
-
-
-
 function getHeadlineStatus(jsonData) {
   if (!Object.keys(jsonData).length) return { curr: "", status: "" };
   const currentDate = new Date();
+  currentDate.setHours(0, 0, 0, 0);
   const statusObj = { curr: "", status: "" };
 
-  if (currentDate < new Date(jsonData.whitelist.startDate)) {
+  const whitelistStartDate = new Date(jsonData.whitelist.startDate);
+  whitelistStartDate.setHours(0, 0, 0, 0);
+  const whitelistEndDate = new Date(jsonData.whitelist.endDate);
+  whitelistEndDate.setHours(0, 0, 0, 0);
+
+  const presaleStartDate = new Date(jsonData.presale.startDate);
+  presaleStartDate.setHours(0, 0, 0, 0);
+  const presaleEndDate = new Date(jsonData.presale.endDate);
+  presaleEndDate.setHours(0, 0, 0, 0);
+
+  const publicMintStartDate = new Date(jsonData.publicMint.startDate);
+  publicMintStartDate.setHours(0, 0, 0, 0);
+  const publicMintEndDate = new Date(jsonData.publicMint.endDate);
+  publicMintEndDate.setHours(0, 0, 0, 0);
+
+  if (
+    currentDate < whitelistStartDate &&
+    jsonData.whitelist.isRunning
+  ) {
     statusObj.curr = "WHITELIST";
     statusObj.status = "upcoming";
   } else if (
-    currentDate >= new Date(jsonData.whitelist.startDate) &&
-    currentDate <= new Date(jsonData.whitelist.endDate)
+    currentDate >= whitelistStartDate &&
+    currentDate <= whitelistEndDate
   ) {
     statusObj.curr = "WHITELIST";
     statusObj.status = jsonData.whitelist.isRunning ? "live" : "soldout";
   } else if (
-    currentDate > new Date(jsonData.whitelist.endDate) &&
+    currentDate > whitelistEndDate &&
     !jsonData.presale.startDate
   ) {
     statusObj.curr = "WHITELIST";
     statusObj.status = "soldout";
   } else if (
-    currentDate > new Date(jsonData.whitelist.endDate) &&
-    currentDate < new Date(jsonData.presale.startDate)
+    currentDate >= presaleStartDate &&
+    currentDate <= presaleEndDate &&
+    jsonData.presale.isRunning
   ) {
     statusObj.curr = "PRESALE";
-    statusObj.status = "upcoming";
+    statusObj.status = "live";
   } else if (
-    currentDate >= new Date(jsonData.presale.startDate) &&
-    currentDate <= new Date(jsonData.presale.endDate)
-  ) {
-    statusObj.curr = "PRESALE";
-    statusObj.status = jsonData.presale.isRunning ? "live" : "soldout";
-  } else if (
-    currentDate > new Date(jsonData.presale.endDate) &&
+    currentDate > presaleEndDate &&
     !jsonData.publicMint.startDate
   ) {
     statusObj.curr = "PRESALE";
     statusObj.status = "soldout";
   } else if (
-    currentDate >= new Date(jsonData.publicMint.startDate) &&
-    currentDate <= new Date(jsonData.publicMint.endDate)
+    currentDate >= publicMintStartDate &&
+    currentDate <= publicMintEndDate &&
+    jsonData.publicMint.isRunning
   ) {
     statusObj.curr = "PUBLIC MINT";
-    statusObj.status = jsonData.publicMint.isRunning ? "live" : "soldout";
+    statusObj.status = "live";
+  } else if (
+    currentDate < publicMintStartDate &&
+    jsonData.publicMint.isRunning
+  ) {
+    statusObj.curr = "PUBLIC MINT";
+    statusObj.status = "upcoming";
   } else {
     statusObj.curr = "PUBLIC MINT";
     statusObj.status = "soldout";
@@ -142,6 +176,7 @@ function getHeadlineStatus(jsonData) {
 
   return statusObj;
 }
+
 
 function getStatus(obj) {
   if (!obj) return "COMING SOON";
