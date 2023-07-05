@@ -11,12 +11,12 @@ export default function AdminPanel() {
     const [collections, setCollections] = useState([])
 
     const fetchAllCollection = async () => {
-        const res = await axios.get('http://localhost:8080/api/all-collections')
+        const res = await axios.get('http://140.82.7.237:8080/api/all-collections')
         setCollections(res.data.map((item) => ({ name: item.name, id: item._id })))
     }
 
     const createNewCollection = async () => {
-        const res = await axios.get('http://localhost:8080/api/create-collection')
+        const res = await axios.get('http://140.82.7.237:8080/api/create-collection')
         console.log(res.data.status)
         window.location.reload()
     }

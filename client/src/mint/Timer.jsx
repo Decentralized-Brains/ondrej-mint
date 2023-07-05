@@ -2,7 +2,12 @@ import React, { useEffect, useState } from 'react';
 
 const Timer = ({ endDate }) => {
     const calculateTimeLeft = () => {
-        const difference = new Date(endDate) - new Date();
+        let newDT = new Date(endDate);
+        newDT = new Date(newDT.getTime() + (newDT.getTimezoneOffset() * 60000));
+
+        let currentDate = new Date();
+        currentDate = new Date(currentDate.getTime() + (currentDate.getTimezoneOffset() * 60000));
+        const difference = newDT - currentDate;
         let timeLeft = {};
 
         if (difference > 0) {

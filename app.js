@@ -44,7 +44,9 @@ app.post('/api/upload-collection-files', cpUpload, async (req, res) => {
     try {
         const collection = await Collection.findOne(id ? { _id: id } : { name: "ondrej" });
         if (req.files.images) collection.images = req.files['images'].map(file => file.filename);
-        if (req.files.pdf) collection.conditions.pdf = req.files['pdf'][0].filename;
+        if (req.files.pdf) collection.conditions.pdf = req.files['pdf'][0].filename + ".pdf";
+        // rename uploaded pdf file to .pdf
+        if (req.files.pdf) fs.renameSync(`public/files/${req.files['pdf'][0].filename}`, `public/files/${req.files['pdf'][0].filename}.pdf`);
         await collection.save();
 
         res.json({ message: 'Uploaded successfully.' });

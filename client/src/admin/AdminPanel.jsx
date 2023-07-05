@@ -15,7 +15,7 @@ export default function AdminPanel() {
     const [isLink, setIsLink] = useState(false)
 
     const fetchCollection = async () => {
-        const res = await axios.get('http://localhost:8080/api/collection' + (params.id ? `?id=${params.id}` : ''))
+        const res = await axios.get('http://140.82.7.237:8080/api/collection' + (params.id ? `?id=${params.id}` : ''))
         setCollection(res.data)
     }
 
@@ -41,7 +41,7 @@ export default function AdminPanel() {
         if (pdf) formData.append('pdf', pdf);
 
         try {
-            const res = await axios.post('http://localhost:8080/api/upload-collection-files' + (params.id ? `?id=${params.id}` : ''), formData)
+            const res = await axios.post('http://140.82.7.237:8080/api/upload-collection-files' + (params.id ? `?id=${params.id}` : ''), formData)
         } catch (error) {
             console.log(error)
         }
@@ -49,7 +49,7 @@ export default function AdminPanel() {
 
     const handleDataUpdate = async () => {
         try {
-            const res = await axios.post('http://localhost:8080/api/update-data' + (params.id ? `?id=${params.id}` : ''), collection)
+            const res = await axios.post('http://140.82.7.237:8080/api/update-data' + (params.id ? `?id=${params.id}` : ''), collection)
             if (images || pdf) await handleFileUpload()
             alert(res.data.message)
         } catch (error) {
@@ -58,8 +58,7 @@ export default function AdminPanel() {
     }
 
     const formatDate = (date) => {
-        if (date) return moment(date).format('YYYY-MM-DD')
-        return ''
+        return date
     }
 
     useEffect(() => {
@@ -130,10 +129,10 @@ export default function AdminPanel() {
 
                 <h2>Whitelist</h2>
                 <label>Start Date:</label>
-                <input className='p-2 m-2 text-black' type="datetime" name="whitelist.startDate" value={formatDate(whitelist?.startDate) || ''} onChange={handleChanges} />
+                <input className='p-2 m-2 text-black' type="datetime-local" name="whitelist.startDate" value={formatDate(whitelist?.startDate) || ''} onChange={handleChanges} />
                 <br />
                 <label>End Date:</label>
-                <input className='p-2 m-2 text-black' type="datetime" name="whitelist.endDate" value={formatDate(whitelist?.endDate) || ''} onChange={handleChanges} />
+                <input className='p-2 m-2 text-black' type="datetime-local" name="whitelist.endDate" value={formatDate(whitelist?.endDate) || ''} onChange={handleChanges} />
                 <br />
                 <label>Is Running:</label>
                 <input type="checkbox" className='m-2' name="whitelist.isRunning" checked={whitelist?.isRunning || false} onChange={handleChanges} />
@@ -142,10 +141,10 @@ export default function AdminPanel() {
                 <br />
                 <h2>Presale</h2>
                 <label>Start Date:</label>
-                <input className='p-2 m-2 text-black' type="datetime" name="presale.startDate" value={formatDate(presale?.startDate) || ''} onChange={handleChanges} />
+                <input className='p-2 m-2 text-black' type="datetime-local" name="presale.startDate" value={formatDate(presale?.startDate) || ''} onChange={handleChanges} />
                 <br />
                 <label>End Date:</label>
-                <input className='p-2 m-2 text-black' type="datetime" name="presale.endDate" value={formatDate(presale?.endDate) || ''} onChange={handleChanges} />
+                <input className='p-2 m-2 text-black' type="datetime-local" name="presale.endDate" value={formatDate(presale?.endDate) || ''} onChange={handleChanges} />
                 <br />
                 <label>Is Running:</label>
                 <input type="checkbox" className='m-2' name="presale.isRunning" checked={presale?.isRunning || false} onChange={handleChanges} />
@@ -156,10 +155,10 @@ export default function AdminPanel() {
 
                 <h2>Public Mint</h2>
                 <label>Start Date:</label>
-                <input className='p-2 m-2 text-black' type="datetime" name="publicMint.startDate" value={formatDate(publicMint?.startDate) || ''} onChange={handleChanges} />
+                <input className='p-2 m-2 text-black' type="datetime-local" name="publicMint.startDate" value={formatDate(publicMint?.startDate) || ''} onChange={handleChanges} />
                 <br />
                 <label>End Date:</label>
-                <input className='p-2 m-2 text-black' type="datetime" name="publicMint.endDate" value={formatDate(publicMint?.endDate) || ''} onChange={handleChanges} />
+                <input className='p-2 m-2 text-black' type="datetime-local" name="publicMint.endDate" value={formatDate(publicMint?.endDate) || ''} onChange={handleChanges} />
                 <br />
                 <label>Is Running:</label>
                 <input type="checkbox" className='m-2' name="publicMint.isRunning" checked={publicMint?.isRunning || false} onChange={handleChanges} />

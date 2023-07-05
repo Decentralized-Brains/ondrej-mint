@@ -17,17 +17,19 @@ import "swiper/css/navigation";
 import { Autoplay } from "swiper";
 
 function getTimeStatus(jsonData) {
-  const currentDate = new Date();
-  currentDate.setHours(0, 0, 0, 0);
+  let currentDate = new Date();
+  currentDate = new Date(currentDate.getTime() + (currentDate.getTimezoneOffset() * 60000));
+
 
   if (!Object.keys(jsonData).length) return { msg: "ending", date: currentDate };
 
   const checkStatus = ({ startDate, endDate, isRunning }) => {
     if (!isRunning || !startDate || !endDate ) return false;
-    const startDateObj = new Date(startDate);
-    startDateObj.setHours(0, 0, 0, 0);
-    const endDateObj = new Date(endDate);
-    endDateObj.setHours(0, 0, 0, 0);
+    let startDateObj = new Date(startDate);
+    startDateObj = new Date(startDateObj.getTime() + (startDateObj.getTimezoneOffset() * 60000));
+
+    let endDateObj = new Date(endDate);
+    endDateObj = new Date(endDateObj.getTime() + (endDateObj.getTimezoneOffset() * 60000));
 
     if (currentDate >= startDateObj && currentDate <= endDateObj) return 2
     else if (currentDate < startDateObj) return 1
@@ -66,15 +68,16 @@ function getTimeStatus(jsonData) {
 function getHeadlineStatus(jsonData) {
   if (!Object.keys(jsonData).length) return "WHITELIST";
 
-  const currentDate = new Date();
-  currentDate.setHours(0, 0, 0, 0);
+  let currentDate = new Date();
+  currentDate = new Date(currentDate.getTime() + (currentDate.getTimezoneOffset() * 60000));
+
 
   const checkStatus = ({ startDate, endDate, isRunning }) => {
     if (!isRunning || !startDate || !endDate) return false;
-    const startDateObj = new Date(startDate);
-    startDateObj.setHours(0, 0, 0, 0);
-    const endDateObj = new Date(endDate);
-    endDateObj.setHours(0, 0, 0, 0);
+    let startDateObj = new Date(startDate);
+    startDateObj = new Date(startDateObj.getTime() + (startDateObj.getTimezoneOffset() * 60000));
+    let endDateObj = new Date(endDate);
+    endDateObj = new Date(endDateObj.getTime() + (endDateObj.getTimezoneOffset() * 60000));
 
     if (currentDate >= startDateObj && currentDate <= endDateObj) return true
     else if (currentDate < startDateObj) return true
@@ -94,13 +97,13 @@ function getStatus(obj) {
   const { startDate, endDate, isRunning } = obj;
   if (!startDate || !endDate || !isRunning) return "SOLDOUT";
 
-  const currDT = new Date();
-  currDT.setHours(0, 0, 0, 0);
+  let currDT = new Date();
+  currDT = new Date(currDT.getTime() + (currDT.getTimezoneOffset() + 120) * 60000);
 
-  const startDT = new Date(startDate);
-  startDT.setHours(0, 0, 0, 0);
-  const endDT = new Date(endDate);
-  endDT.setHours(0, 0, 0, 0);
+  let startDT = new Date(startDate);
+  startDT = new Date(startDT.getTime() + (startDT.getTimezoneOffset() + 120) * 60000);
+  let endDT = new Date(endDate);
+  endDT = new Date(endDT.getTime() + (endDT.getTimezoneOffset() + 120) * 60000);
 
   if (currDT < startDT) return "UPCOMING";
   else if (currDT >= startDT && currDT <= endDT) return "LIVE"
@@ -116,7 +119,7 @@ const Mint = () => {
   const [count, setCount] = useState(2);
 
   const fetchCollection = async () => {
-      const res = await axios.get(`http://localhost:8080/api/collection` + (params.id ? `?id=${params.id}` : ''))
+      const res = await axios.get(`http://140.82.7.237:8080/api/collection` + (params.id ? `?id=${params.id}` : ''))
       setCollection(res.data)
   }
 
@@ -127,7 +130,7 @@ const Mint = () => {
   const handleConditionClick = () => {
     const { conditions } = collection
     if (conditions.link) openLink(conditions.link)
-    if (conditions.pdf) openLink(`http://localhost:8080/files/${conditions.pdf}`)
+    if (conditions.pdf) openLink(`http://140.82.7.237:8080/files/${conditions.pdf}`)
   }
 
   useEffect(() => {
@@ -163,7 +166,7 @@ const Mint = () => {
                   <img
                     className="mx-auto object-cover object-center lg:h-[550px] lg:w-[700px]"
                     alt="hero"
-                    src={`http://localhost:8080/files/${filename}`}
+                    src={`http://140.82.7.237:8080/files/${filename}`}
                   />
                 </SwiperSlide>
               );

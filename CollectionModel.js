@@ -10,24 +10,24 @@ const collectionSchema = mongoose.Schema({
         pdf: String
     },
     whitelist: {
-        startDate: Date,
-        endDate: Date,
+        startDate: String,
+        endDate: String,
         isRunning: {
             type: Boolean,
             default: false
         }
     },
     presale: {
-        startDate: Date,
-        endDate: Date,
+        startDate: String,
+        endDate: String,
         isRunning: {
             type: Boolean,
             default: false
         }
     },
     publicMint: {
-        startDate: Date,
-        endDate: Date,
+        startDate: String,
+        endDate: String,
         isRunning: {
             type: Boolean,
             default: false
