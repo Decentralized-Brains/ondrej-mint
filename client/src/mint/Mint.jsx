@@ -13,237 +13,112 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import "swiper/css";
 import "swiper/css/navigation";
 
-// import required modules
 import { Autoplay } from "swiper";
-import { sliderData } from "../data/Data.jsx";
 
 function getTimeStatus(jsonData) {
   const currentDate = new Date();
   currentDate.setHours(0, 0, 0, 0);
+  
   if (!Object.keys(jsonData).length) return { msg: "ending", date: currentDate };
 
-  const whitelistStartDate = new Date(jsonData.whitelist.startDate);
-  whitelistStartDate.setHours(0, 0, 0, 0);
+  const checkStatus = ({ startDate, endDate, isRunning }) => {
+    if (!isRunning) return false;
+    const startDateObj = new Date(startDate);
+    startDateObj.setHours(0, 0, 0, 0);
+    const endDateObj = new Date(endDate);
+    endDateObj.setHours(0, 0, 0, 0);
 
-  const whitelistEndDate = new Date(jsonData.whitelist.endDate);
-  whitelistEndDate.setHours(0, 0, 0, 0);
+    if (currentDate >= startDateObj && currentDate <= endDateObj) return 2
+    else if (currentDate < startDateObj) return 1
+    return false
+  };
 
-  const presaleStartDate = new Date(jsonData.presale.startDate);
-  presaleStartDate.setHours(0, 0, 0, 0);
-
-  const presaleEndDate = new Date(jsonData.presale.endDate);
-  presaleEndDate.setHours(0, 0, 0, 0);
-
-  const publicMintStartDate = new Date(jsonData.publicMint.startDate);
-  publicMintStartDate.setHours(0, 0, 0, 0);
-
-  const publicMintEndDate = new Date(jsonData.publicMint.endDate);
-  publicMintEndDate.setHours(0, 0, 0, 0);
-
-  if (currentDate < whitelistStartDate) {
-    return {
-      msg: "starting",
-      date: whitelistStartDate
-    };
-  } else if (
-    currentDate >= whitelistStartDate &&
-    currentDate <= whitelistEndDate &&
-    jsonData.whitelist.isRunning
-  ) {
-    return {
-      msg: "ending",
-      date: whitelistEndDate
-    };
-  } else if (
-    currentDate > whitelistEndDate &&
-    !jsonData.presale.startDate
-  ) {
-    return {
-      msg: "ending",
-      date: currentDate
-    };
-  } else if (
-    currentDate >= whitelistEndDate &&
-    currentDate < presaleStartDate
-  ) {
-    return {
-      msg: "starting",
-      date: presaleStartDate
-    };
-  } else if (
-    currentDate >= presaleStartDate &&
-    currentDate <= presaleEndDate &&
-    jsonData.presale.isRunning
-  ) {
-    return {
-      msg: "ending",
-      date: presaleEndDate
-    };
-  } else if (
-    currentDate > presaleEndDate &&
-    !jsonData.publicMint.startDate
-  ) {
-    return {
-      msg: "ending",
-      date: currentDate
-    };
-  } else if (
-    currentDate >= publicMintStartDate &&
-    currentDate <= publicMintEndDate &&
-    jsonData.publicMint.isRunning
-  ) {
-    return {
-      msg: "ending",
-      date: publicMintEndDate
-    };
-  } else {
-    return {
-      msg: "ending",
-      date: currentDate
-    };
+  if (checkStatus(jsonData.whitelist) === 1 ) return {
+    msg: "starting",
+    date: new Date(jsonData.whitelist.startDate),
   }
+  else if (checkStatus(jsonData.whitelist) === 2) return {
+    msg: "ending",
+    date: new Date(jsonData.whitelist.endDate),
+  }
+  else if (checkStatus(jsonData.presale) === 1) return {
+    msg: "starting",
+    date: new Date(jsonData.presale.startDate),
+  }
+  else if (checkStatus(jsonData.presale) === 2) return {
+    msg: "ending",
+    date: new Date(jsonData.presale.endDate),
+  }
+  else if (checkStatus(jsonData.publicMint) === 1) return {
+    msg: "starting",
+    date: new Date(jsonData.publicMint.startDate),
+  }
+  else if (checkStatus(jsonData.publicMint) === 2) return {
+    msg: "ending",
+    date: new Date(jsonData.publicMint.endDate),
+  }
+
+  return { msg: "ending", date: currentDate };
+  
 }
 
 function getHeadlineStatus(jsonData) {
-  if (!Object.keys(jsonData).length) return { curr: "", status: "" };
+  if (!Object.keys(jsonData).length) return "WHITELIST";
+
   const currentDate = new Date();
   currentDate.setHours(0, 0, 0, 0);
-  const statusObj = { curr: "", status: "" };
 
-  const whitelistStartDate = new Date(jsonData.whitelist.startDate);
-  whitelistStartDate.setHours(0, 0, 0, 0);
-  const whitelistEndDate = new Date(jsonData.whitelist.endDate);
-  whitelistEndDate.setHours(0, 0, 0, 0);
+  const checkStatus = ({ startDate, endDate, isRunning }) => {
+    if (!isRunning) return false;
+    const startDateObj = new Date(startDate);
+    startDateObj.setHours(0, 0, 0, 0);
+    const endDateObj = new Date(endDate);
+    endDateObj.setHours(0, 0, 0, 0);
 
-  const presaleStartDate = new Date(jsonData.presale.startDate);
-  presaleStartDate.setHours(0, 0, 0, 0);
-  const presaleEndDate = new Date(jsonData.presale.endDate);
-  presaleEndDate.setHours(0, 0, 0, 0);
+    if (currentDate >= startDateObj && currentDate <= endDateObj) return true
+    else if (currentDate < startDateObj) return true
+    return false
+  };
 
-  const publicMintStartDate = new Date(jsonData.publicMint.startDate);
-  publicMintStartDate.setHours(0, 0, 0, 0);
-  const publicMintEndDate = new Date(jsonData.publicMint.endDate);
-  publicMintEndDate.setHours(0, 0, 0, 0);
+  if (checkStatus(jsonData.whitelist)) return "WHITELIST";
+  else if (checkStatus(jsonData.presale)) return "PRESALE";
+  else if (checkStatus(jsonData.publicMint)) return "PUBLIC MINT";
 
-  if (
-    currentDate < whitelistStartDate &&
-    jsonData.whitelist.isRunning
-  ) {
-    statusObj.curr = "WHITELIST";
-    statusObj.status = "upcoming";
-  } else if (
-    currentDate >= whitelistStartDate &&
-    currentDate <= whitelistEndDate
-  ) {
-    statusObj.curr = "WHITELIST";
-    statusObj.status = jsonData.whitelist.isRunning ? "live" : "soldout";
-  } else if (
-    currentDate > whitelistEndDate &&
-    !jsonData.presale.startDate
-  ) {
-    statusObj.curr = "WHITELIST";
-    statusObj.status = "soldout";
-  } else if (
-    currentDate >= presaleStartDate &&
-    currentDate <= presaleEndDate &&
-    jsonData.presale.isRunning
-  ) {
-    statusObj.curr = "PRESALE";
-    statusObj.status = "live";
-  } else if (
-    currentDate > presaleEndDate &&
-    !jsonData.publicMint.startDate
-  ) {
-    statusObj.curr = "PRESALE";
-    statusObj.status = "soldout";
-  } else if (
-    currentDate >= publicMintStartDate &&
-    currentDate <= publicMintEndDate &&
-    jsonData.publicMint.isRunning
-  ) {
-    statusObj.curr = "PUBLIC MINT";
-    statusObj.status = "live";
-  } else if (
-    currentDate < publicMintStartDate &&
-    jsonData.publicMint.isRunning
-  ) {
-    statusObj.curr = "PUBLIC MINT";
-    statusObj.status = "upcoming";
-  } else {
-    statusObj.curr = "PUBLIC MINT";
-    statusObj.status = "soldout";
-  }
-
-  return statusObj;
+  return "PUBLIC MINT";
 }
 
 
+
 function getStatus(obj) {
-  if (!obj) return "COMING SOON";
+  if (!obj) return "SOLDOUT";
   
   const { startDate, endDate, isRunning } = obj;
-  if (!startDate || !endDate) return "COMING SOON";
+  if (!startDate || !endDate || !isRunning) return "SOLDOUT";
 
   const currDT = new Date();
-  if (isRunning) {
-    const startDT = new Date(startDate);
-    const endDT = new Date(endDate);
+  currDT.setHours(0, 0, 0, 0);
 
-    if (currDT < startDT) return "UPCOMING";
-    else if (currDT >= startDT && currDT <= endDT) return "LIVE"
-    else return "SOLDOUT";
-  } else {
-    return "SOLDOUT"
-  };
+  const startDT = new Date(startDate);
+  startDT.setHours(0, 0, 0, 0);
+  const endDT = new Date(endDate);
+  endDT.setHours(0, 0, 0, 0);
+
+  if (currDT < startDT) return "UPCOMING";
+  else if (currDT >= startDT && currDT <= endDT) return "LIVE"
+  else return "SOLDOUT";
+ 
 }
 
 
 const Mint = () => {
   const [collection, setCollection] = useState({})
+  console.log(collection)
   const [count, setCount] = useState(2);
 
   const fetchCollection = async () => {
-      const res = await axios.get('http://140.82.7.237:8080/api/collection')
+      const res = await axios.get('http://localhost:8080/api/collection')
       console.log(res.data)
       setCollection(res.data)
-  }
-
-
-  const maxGuests = 999;
-  const minGuests = 1;
-
-  const decrementCount = () => {
-    if (count > minGuests) setCount(count - 1);
-  };
-
-  const incrementCount = () => {
-    if (count < maxGuests) setCount(count + 1);
-    else if (count > maxGuests) setCount(maxGuests);
-  };
-
-
-  const [daysLeft, setDaysLeft] = useState(0);
-  const [hoursLeft, setHoursLeft] = useState(0);
-  const [minutesLeft, setMinutesLeft] = useState(0);
-  const [secondsLeft, setSecondsLeft] = useState(0);
-
-  function updateCountdown() {
-    const date = new Date();
-    const daysInMonth = new Date(
-      date.getFullYear(),
-      date.getMonth() + 1,
-      0
-    ).getDate();
-    const daysLeft = daysInMonth - date.getDate();
-    const hoursLeft = 24 - date.getHours();
-    const minutesLeft = 60 - date.getMinutes();
-    const secondsLeft = 60 - date.getSeconds();
-
-    setDaysLeft(daysLeft);
-    setHoursLeft(hoursLeft);
-    setMinutesLeft(minutesLeft);
-    setSecondsLeft(secondsLeft);
-
   }
 
   const openLink = (url) => {
@@ -253,18 +128,22 @@ const Mint = () => {
   const handleConditionClick = () => {
     const { conditions } = collection
     if (conditions.link) openLink(conditions.link)
-    if (conditions.pdf) openLink(`http://140.82.7.237:8080/files/${conditions.pdf}`)
+    if (conditions.pdf) openLink(`http://localhost:8080/files/${conditions.pdf}`)
   }
 
   useEffect(() => {
     fetchCollection()
-    // const intervalId = setInterval(updateCountdown, 1000);
-    // return () => clearInterval(intervalId);
   }, []);
 
   const { whitelist, presale, publicMint } = collection
   const { date, msg } = getTimeStatus(collection)
-  console.log(date, msg)
+
+  const currItem = getHeadlineStatus(collection)
+  const getCurrItemStatus = () => {
+    if (currItem === "WHITELIST") return getStatus(whitelist)
+    else if (currItem === "PRESALE") return getStatus(presale)
+    else return getStatus(publicMint)
+  }
 
   return (
     <div className="container mt-[60px]">
@@ -285,7 +164,7 @@ const Mint = () => {
                   <img
                     className="mx-auto object-cover object-center lg:h-[550px] lg:w-[700px]"
                     alt="hero"
-                    src={`http://140.82.7.237:8080/files/${filename}`}
+                    src={`http://localhost:8080/files/${filename}`}
                   />
                 </SwiperSlide>
               );
@@ -298,10 +177,10 @@ const Mint = () => {
 
           <div className="flex items-center justify-center gap-[22px] py-4">
             <h1 className=" text-2xl font-extrabold uppercase sm:text-[2rem]">
-              {getHeadlineStatus(collection).curr} is{" "}
+              {currItem} is{" "}
             </h1>
             <span className="rounded-full bg-[#FFF200] px-[10px] py-[8px] text-[18px] font-extrabold text-black">
-              {getHeadlineStatus(collection).status}
+              {getCurrItemStatus()}
             </span>
           </div>
 

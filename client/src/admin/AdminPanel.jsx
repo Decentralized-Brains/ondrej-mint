@@ -13,7 +13,7 @@ export default function AdminPanel() {
     const [isLink, setIsLink] = useState(false)
 
     const fetchCollection = async () => {
-        const res = await axios.get('http://140.82.7.237:8080/api/collection')
+        const res = await axios.get('http://localhost:8080/api/collection')
         console.log(res.data)
         setCollection(res.data)
     }
@@ -40,7 +40,7 @@ export default function AdminPanel() {
         if (pdf) formData.append('pdf', pdf);
 
         try {
-            const res = await axios.post('http://140.82.7.237:8080/api/upload-collection-files', formData)
+            const res = await axios.post('http://localhost:8080/api/upload-collection-files', formData)
         } catch (error) {
             console.log(error)
         }
@@ -48,7 +48,7 @@ export default function AdminPanel() {
 
     const handleDataUpdate = async () => {
         try {
-            const res = await axios.post('http://140.82.7.237:8080/api/update-data', collection)
+            const res = await axios.post('http://localhost:8080/api/update-data', collection)
             if (images || pdf) await handleFileUpload()
             alert(res.data.message)
         } catch (error) {
