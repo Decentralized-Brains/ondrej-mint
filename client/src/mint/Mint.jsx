@@ -4,6 +4,7 @@ import { FaEthereum } from "react-icons/fa";
 import { BiCheck, BiMinus, BiPlus } from "react-icons/bi";
 import axios from "axios";
 import Timer from "./Timer.jsx";
+import { useParams } from "react-router-dom";
 
 //slider start
 // Import Swiper React components
@@ -18,11 +19,11 @@ import { Autoplay } from "swiper";
 function getTimeStatus(jsonData) {
   const currentDate = new Date();
   currentDate.setHours(0, 0, 0, 0);
-  
+
   if (!Object.keys(jsonData).length) return { msg: "ending", date: currentDate };
 
   const checkStatus = ({ startDate, endDate, isRunning }) => {
-    if (!isRunning) return false;
+    if (!isRunning || !startDate || !endDate ) return false;
     const startDateObj = new Date(startDate);
     startDateObj.setHours(0, 0, 0, 0);
     const endDateObj = new Date(endDate);
@@ -33,27 +34,27 @@ function getTimeStatus(jsonData) {
     return false
   };
 
-  if (checkStatus(jsonData.whitelist) === 1 ) return {
+  if (jsonData.whitelist && checkStatus(jsonData.whitelist) === 1 ) return {
     msg: "starting",
     date: new Date(jsonData.whitelist.startDate),
   }
-  else if (checkStatus(jsonData.whitelist) === 2) return {
+  else if (jsonData.whitelist && checkStatus(jsonData.whitelist) === 2) return {
     msg: "ending",
     date: new Date(jsonData.whitelist.endDate),
   }
-  else if (checkStatus(jsonData.presale) === 1) return {
+  else if (jsonData.presale && checkStatus(jsonData.presale) === 1) return {
     msg: "starting",
     date: new Date(jsonData.presale.startDate),
   }
-  else if (checkStatus(jsonData.presale) === 2) return {
+  else if (jsonData.presale && checkStatus(jsonData.presale) === 2) return {
     msg: "ending",
     date: new Date(jsonData.presale.endDate),
   }
-  else if (checkStatus(jsonData.publicMint) === 1) return {
+  else if (jsonData.publicMint && checkStatus(jsonData.publicMint) === 1) return {
     msg: "starting",
     date: new Date(jsonData.publicMint.startDate),
   }
-  else if (checkStatus(jsonData.publicMint) === 2) return {
+  else if (jsonData.publicMint && checkStatus(jsonData.publicMint) === 2) return {
     msg: "ending",
     date: new Date(jsonData.publicMint.endDate),
   }
@@ -69,7 +70,7 @@ function getHeadlineStatus(jsonData) {
   currentDate.setHours(0, 0, 0, 0);
 
   const checkStatus = ({ startDate, endDate, isRunning }) => {
-    if (!isRunning) return false;
+    if (!isRunning || !startDate || !endDate) return false;
     const startDateObj = new Date(startDate);
     startDateObj.setHours(0, 0, 0, 0);
     const endDateObj = new Date(endDate);
@@ -80,14 +81,12 @@ function getHeadlineStatus(jsonData) {
     return false
   };
 
-  if (checkStatus(jsonData.whitelist)) return "WHITELIST";
-  else if (checkStatus(jsonData.presale)) return "PRESALE";
-  else if (checkStatus(jsonData.publicMint)) return "PUBLIC MINT";
+  if (jsonData.whitelist && checkStatus(jsonData.whitelist)) return "WHITELIST";
+  else if (jsonData.presale && checkStatus(jsonData.presale)) return "PRESALE";
+  else if (jsonData.publicMint && checkStatus(jsonData.publicMint)) return "PUBLIC MINT";
 
   return "PUBLIC MINT";
 }
-
-
 
 function getStatus(obj) {
   if (!obj) return "SOLDOUT";
@@ -112,12 +111,12 @@ function getStatus(obj) {
 
 const Mint = () => {
   const [collection, setCollection] = useState({})
-  console.log(collection)
+  const params = useParams();
+  console.log(params)
   const [count, setCount] = useState(2);
 
   const fetchCollection = async () => {
-      const res = await axios.get('http://localhost:8080/api/collection')
-      console.log(res.data)
+      const res = await axios.get(`http://localhost:8080/api/collection` + (params.id ? `?id=${params.id}` : ''))
       setCollection(res.data)
   }
 
@@ -133,7 +132,7 @@ const Mint = () => {
 
   useEffect(() => {
     fetchCollection()
-  }, []);
+  }, [params.id]);
 
   const { whitelist, presale, publicMint } = collection
   const { date, msg } = getTimeStatus(collection)

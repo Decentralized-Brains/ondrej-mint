@@ -5,16 +5,17 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import "react-toastify/dist/ReactToastify.css";
 import { ToastContainer, toast } from "react-toastify";
+import { useParams } from 'react-router-dom';
 
 export default function AdminPanel() {
     const [collection, setCollection] = useState({})
+    const params = useParams()
     const [images, setImages] = useState(null)
     const [pdf, setPdf] = useState(null)
     const [isLink, setIsLink] = useState(false)
 
     const fetchCollection = async () => {
-        const res = await axios.get('http://localhost:8080/api/collection')
-        console.log(res.data)
+        const res = await axios.get('http://localhost:8080/api/collection' + (params.id ? `?id=${params.id}` : ''))
         setCollection(res.data)
     }
 
@@ -40,7 +41,7 @@ export default function AdminPanel() {
         if (pdf) formData.append('pdf', pdf);
 
         try {
-            const res = await axios.post('http://localhost:8080/api/upload-collection-files', formData)
+            const res = await axios.post('http://localhost:8080/api/upload-collection-files' + (params.id ? `?id=${params.id}` : ''), formData)
         } catch (error) {
             console.log(error)
         }
@@ -48,7 +49,7 @@ export default function AdminPanel() {
 
     const handleDataUpdate = async () => {
         try {
-            const res = await axios.post('http://localhost:8080/api/update-data', collection)
+            const res = await axios.post('http://localhost:8080/api/update-data' + (params.id ? `?id=${params.id}` : ''), collection)
             if (images || pdf) await handleFileUpload()
             alert(res.data.message)
         } catch (error) {
@@ -63,7 +64,7 @@ export default function AdminPanel() {
 
     useEffect(() => {
         fetchCollection()
-    }, [])
+    }, [params.id])
     console.log(collection)
 
     const { maxPerWallet, contractAddress, conditions, whitelist, presale, publicMint } = collection
@@ -129,10 +130,10 @@ export default function AdminPanel() {
 
                 <h2>Whitelist</h2>
                 <label>Start Date:</label>
-                <input className='p-2 m-2 text-black' type="date" name="whitelist.startDate" value={formatDate(whitelist?.startDate) || ''} onChange={handleChanges} />
+                <input className='p-2 m-2 text-black' type="datetime" name="whitelist.startDate" value={formatDate(whitelist?.startDate) || ''} onChange={handleChanges} />
                 <br />
                 <label>End Date:</label>
-                <input className='p-2 m-2 text-black' type="date" name="whitelist.endDate" value={formatDate(whitelist?.endDate) || ''} onChange={handleChanges} />
+                <input className='p-2 m-2 text-black' type="datetime" name="whitelist.endDate" value={formatDate(whitelist?.endDate) || ''} onChange={handleChanges} />
                 <br />
                 <label>Is Running:</label>
                 <input type="checkbox" className='m-2' name="whitelist.isRunning" checked={whitelist?.isRunning || false} onChange={handleChanges} />
@@ -141,10 +142,10 @@ export default function AdminPanel() {
                 <br />
                 <h2>Presale</h2>
                 <label>Start Date:</label>
-                <input className='p-2 m-2 text-black' type="date" name="presale.startDate" value={formatDate(presale?.startDate) || ''} onChange={handleChanges} />
+                <input className='p-2 m-2 text-black' type="datetime" name="presale.startDate" value={formatDate(presale?.startDate) || ''} onChange={handleChanges} />
                 <br />
                 <label>End Date:</label>
-                <input className='p-2 m-2 text-black' type="date" name="presale.endDate" value={formatDate(presale?.endDate) || ''} onChange={handleChanges} />
+                <input className='p-2 m-2 text-black' type="datetime" name="presale.endDate" value={formatDate(presale?.endDate) || ''} onChange={handleChanges} />
                 <br />
                 <label>Is Running:</label>
                 <input type="checkbox" className='m-2' name="presale.isRunning" checked={presale?.isRunning || false} onChange={handleChanges} />
@@ -155,10 +156,10 @@ export default function AdminPanel() {
 
                 <h2>Public Mint</h2>
                 <label>Start Date:</label>
-                <input className='p-2 m-2 text-black' type="date" name="publicMint.startDate" value={formatDate(publicMint?.startDate) || ''} onChange={handleChanges} />
+                <input className='p-2 m-2 text-black' type="datetime" name="publicMint.startDate" value={formatDate(publicMint?.startDate) || ''} onChange={handleChanges} />
                 <br />
                 <label>End Date:</label>
-                <input className='p-2 m-2 text-black' type="date" name="publicMint.endDate" value={formatDate(publicMint?.endDate) || ''} onChange={handleChanges} />
+                <input className='p-2 m-2 text-black' type="datetime" name="publicMint.endDate" value={formatDate(publicMint?.endDate) || ''} onChange={handleChanges} />
                 <br />
                 <label>Is Running:</label>
                 <input type="checkbox" className='m-2' name="publicMint.isRunning" checked={publicMint?.isRunning || false} onChange={handleChanges} />

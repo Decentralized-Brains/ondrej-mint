@@ -16,16 +16,33 @@ app.use(express.static('public'))
 app.use(express.json())
 
 // Routes
-app.get("/api/collection", async (req, res) => {
-    const collection = await Collection.findOne({ name: "ondrej" });
-    res.json(collection)
+app.get("/api/all-collections", async (req, res) => {
+    const collections = await Collection.find({});
+    res.json(collections)
 })
 
+app.get("/api/create-collection", async (req, res) => {
+    const collection = new Collection({ name: "new collections" });
+    await collection.save();
+    res.json({ status: true })
+})
+app.get("/api/collection", async (req, res) => {
+    try {
+        const { id } = req.query;
+        const collection = await Collection.findOne(id ? { _id: id } : { name: "ondrej" });
+        res.json(collection)
+    } catch (err) {
+        const collection = await Collection.findOne({ name: "ondrej" });
+        res.json(collection)
+    }
+})
 
+ 
 const cpUpload = upload.fields([{ name: 'pdf', maxCount: 1 }, { name: 'images', maxCount: 10 }])
 app.post('/api/upload-collection-files', cpUpload, async (req, res) => {
+    const { id } = req.query;
     try {
-        const collection = await Collection.findOne({ name: "ondrej" });
+        const collection = await Collection.findOne(id ? { _id: id } : { name: "ondrej" });
         if (req.files.images) collection.images = req.files['images'].map(file => file.filename);
         if (req.files.pdf) collection.conditions.pdf = req.files['pdf'][0].filename;
         await collection.save();
@@ -38,7 +55,8 @@ app.post('/api/upload-collection-files', cpUpload, async (req, res) => {
 }); 
 
 app.post("/api/update-data", async (req, res) => {
-    await Collection.findOneAndUpdate({ name: "ondrej" }, req.body);
+    const { id } = req.query;
+    await Collection.findOneAndUpdate(id ? { _id: id } : { name: "ondrej" }, req.body);
     res.json({ message: 'Updated successfully.' });
 })
 
