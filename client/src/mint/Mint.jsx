@@ -18,7 +18,7 @@ import { Autoplay } from "swiper";
 
 function getTimeStatus(jsonData) {
   let currentDate = new Date();
-  currentDate = new Date(currentDate.getTime() + (currentDate.getTimezoneOffset() * 60000));
+//  currentDate = new Date(currentDate.getTime() + (currentDate.getTimezoneOffset() * 60000));
 
 
   if (!Object.keys(jsonData).length) return { msg: "ending", date: currentDate };
@@ -26,10 +26,10 @@ function getTimeStatus(jsonData) {
   const checkStatus = ({ startDate, endDate, isRunning }) => {
     if (!isRunning || !startDate || !endDate ) return false;
     let startDateObj = new Date(startDate);
-    startDateObj = new Date(startDateObj.getTime() + (startDateObj.getTimezoneOffset() * 60000));
+//    startDateObj = new Date(startDateObj.getTime() + (startDateObj.getTimezoneOffset() * 60000));
 
     let endDateObj = new Date(endDate);
-    endDateObj = new Date(endDateObj.getTime() + (endDateObj.getTimezoneOffset() * 60000));
+//    endDateObj = new Date(endDateObj.getTime() + (endDateObj.getTimezoneOffset() * 60000));
 
     if (currentDate >= startDateObj && currentDate <= endDateObj) return 2
     else if (currentDate < startDateObj) return 1
@@ -69,15 +69,15 @@ function getHeadlineStatus(jsonData) {
   if (!Object.keys(jsonData).length) return "WHITELIST";
 
   let currentDate = new Date();
-  currentDate = new Date(currentDate.getTime() + (currentDate.getTimezoneOffset() * 60000));
+//  currentDate = new Date(currentDate.getTime() + (currentDate.getTimezoneOffset() * 60000));
 
 
   const checkStatus = ({ startDate, endDate, isRunning }) => {
     if (!isRunning || !startDate || !endDate) return false;
     let startDateObj = new Date(startDate);
-    startDateObj = new Date(startDateObj.getTime() + (startDateObj.getTimezoneOffset() * 60000));
+//    startDateObj = new Date(startDateObj.getTime() + (startDateObj.getTimezoneOffset() * 60000));
     let endDateObj = new Date(endDate);
-    endDateObj = new Date(endDateObj.getTime() + (endDateObj.getTimezoneOffset() * 60000));
+//    endDateObj = new Date(endDateObj.getTime() + (endDateObj.getTimezoneOffset() * 60000));
 
     if (currentDate >= startDateObj && currentDate <= endDateObj) return true
     else if (currentDate < startDateObj) return true
@@ -98,12 +98,12 @@ function getStatus(obj) {
   if (!startDate || !endDate || !isRunning) return "SOLDOUT";
 
   let currDT = new Date();
-  currDT = new Date(currDT.getTime() + (currDT.getTimezoneOffset() + 120) * 60000);
+//  currDT = new Date(currDT.getTime() + (currDT.getTimezoneOffset() + 120) * 60000);
 
   let startDT = new Date(startDate);
-  startDT = new Date(startDT.getTime() + (startDT.getTimezoneOffset() + 120) * 60000);
+//  startDT = new Date(startDT.getTime() + (startDT.getTimezoneOffset() + 120) * 60000);
   let endDT = new Date(endDate);
-  endDT = new Date(endDT.getTime() + (endDT.getTimezoneOffset() + 120) * 60000);
+//  endDT = new Date(endDT.getTime() + (endDT.getTimezoneOffset() + 120) * 60000);
 
   if (currDT < startDT) return "UPCOMING";
   else if (currDT >= startDT && currDT <= endDT) return "LIVE"
