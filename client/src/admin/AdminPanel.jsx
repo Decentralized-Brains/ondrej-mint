@@ -66,7 +66,7 @@ export default function AdminPanel() {
     }, [params.id])
     console.log(collection)
 
-    const { maxPerWallet, contractAddress, conditions, whitelist, presale, publicMint } = collection
+    const { maxPerWallet, contractAddress, conditions, whitelist, presale, publicMint, name } = collection
 
 
     return (
@@ -89,6 +89,13 @@ export default function AdminPanel() {
                     onChange={handleChanges} 
                     type='number' 
                     name='maxPerWallet'
+                />
+                <h2 className='font-mono my-5'>Name</h2>
+                <input 
+                    className='p-2 text-black'  
+                    value={name || ''} 
+                    onChange={handleChanges} 
+                    name='name'
                 />
             
                 <h2 className='font-mono my-5'>Update contract address</h2>

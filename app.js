@@ -21,6 +21,12 @@ app.get("/api/all-collections", async (req, res) => {
     res.json(collections)
 })
 
+app.delete("/api/delete-collection", async (req, res) => {
+    const { id } = req.query;
+    await Collection.deleteOne({ _id: id });
+    res.json({ status: true })
+})
+
 app.get("/api/create-collection", async (req, res) => {
     const collection = new Collection({ name: "new collections" });
     await collection.save();

@@ -25,6 +25,13 @@ export default function AdminPanel() {
         window.location.href = `/admin/${id}`
     }
 
+    const deletePage = async (id) => {
+        const res = await axios.delete('http://140.82.7.237:8080/api/delete-collection?id=' + id)
+        console.log(res.data.status)
+        window.location.reload()
+    }
+
+
     useEffect(() => {
         fetchAllCollection()
     }, [])
@@ -34,10 +41,13 @@ export default function AdminPanel() {
         <div className="container py-16 px-2">
         {/* new collection button */}
         <button onClick={createNewCollection} className='mb-5 rounded font-bold'>Create new collections</button>
+            <p><code className='text-green-500'>ondrej</code> is the default collection</p>
             {collections.map((item, idx) => (
-                <div key={idx} className="w-1/2 flex justify-between items-center border-b-2 border-gray-200 py-4">
+                <div key={idx} className="flex justify-between items-center border-b-2 border-gray-200 py-4">
                     <h1 className="text-2xl font-bold">{item.name}</h1>
-                    <h1 className="text-2xl font-bold cursor-pointer" onClick={() => editPage(item.id)}>{item.id}</h1>
+                    <h1 className="text-2xl font-bold">{item.id}</h1>
+                    <h1 className="text-2xl font-bold cursor-pointer" onClick={() => editPage(item.id)}>EDIT</h1>
+                    <h1 className="text-2xl font-bold cursor-pointer" onClick={() => deletePage(item.id)}>DELETE</h1>
                 </div>
             ))}
         </div>
